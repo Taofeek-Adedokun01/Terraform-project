@@ -107,3 +107,35 @@ resource "aws_subnet" "dev-subnet-1" {
     tags = {
     name: var.cidr_blocks[1].name
   }`
+
+# SECTION 2, I created new infrastructure starting with the custom vpc , subnet and giving it names with tags with the codes below
+
+`provider "aws" {
+    region = "eu-west-2"
+}
+variable avail_zone {}
+variable subnet_cidr_block {}
+variable vpc_cidr_block {}
+variable env_prefix {}
+
+
+resource "aws_vpc" "myapp-vpc" {
+  cidr_block = var.vpc_cidr_block
+  tags = {
+    name: "${var.env_prefix}-vpc",
+  }
+}
+resource "aws_subnet" "myapp-subnet-1" {
+    vpc_id = aws_vpc.myapp-vpc.id
+    cidr_block = var.subnet_cidr_block
+    availability_zone = var.avail_zone
+    tags = {
+    name: "${var.env_prefix}-subnet-1",
+  }
+}
+avail_zone = "eu-west-2b"
+subnet_cidr_block = "10.0.10.0/24"
+vpc_cidr_block = "10.0.0.0/16"
+env_prefix = "dev"
+`
+
