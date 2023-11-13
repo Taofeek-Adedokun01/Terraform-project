@@ -89,3 +89,21 @@ resource "aws_subnet" "dev-subnet-1" {
   }
 
 }`
+
+# Store your accesskeys and secret keys in aws home directory for credentials with the command below
+
+`aws configure`
+
+# Set variable using TF environment variable
+
+# Set availability zone as a global variable using "export TF_VAR_avail_zone="eu-west-2a"
+
+`variable avail_zone {}`
+
+`resource "aws_subnet" "dev-subnet-1" {
+    vpc_id = aws_vpc.development-vpc.id
+    cidr_block = var.cidr_blocks[1].cidr_block
+    availability_zone = var.avail_zone
+    tags = {
+    name: var.cidr_blocks[1].name
+  }`
