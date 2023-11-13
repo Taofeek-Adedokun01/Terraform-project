@@ -28,3 +28,13 @@ output "aws-dev-subnet01" {
     value = aws_subnet.dev-subnet-1.id
 }`
 
+# I created data from the existing default vpc with the underlying code
+
+`Data “aws_vpc” “existing-vpc” {
+Default = true
+}
+Resource “aws_subnet” “dev-subnet-2” {
+vpc_id = data.aws_vpc.existing-vpc.id
+Cidr = “10.0.0.1/24”`
+
+
