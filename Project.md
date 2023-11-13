@@ -54,7 +54,7 @@ resource "aws_subnet" "dev-subnet-1" {
   }
 
 }
-variable "dev_environment"{
+variable "dev_environment"
     description = "development environment"
 }
 variable "subnet_cidr_block" {
@@ -66,4 +66,26 @@ variable "subnet_cidr_block" {
 `subnet_cidr_block = "10.0.50.0/24"
 dev_environment = "development"`
 
+# I created list of strings of cidr_blocks for aws_vpc and aws_subnet with a single variable getting the 1st and 2nd cidr_blocks defined in the terraform.tfvars file with the code below.
 
+`variable "cidr_blocks" {
+    description = "cidr blocks for vpcs and subnets"
+    type = list(string)
+}
+cidr_blocks = ["10.0.0.0/16", "10.0.10.0/24"]
+`
+
+`resource "aws_vpc" "development-vpc" {
+  cidr_block = var.cidr_blocks[0]
+  tags = {
+    name: "development",
+  }
+}
+resource "aws_subnet" "dev-subnet-1" {
+    vpc_id = aws_vpc.development-vpc.id
+    cidr_block = var.cidr_blocks[1]
+    tags = {
+    name: "dev-subnet-01"
+  }
+
+}`
