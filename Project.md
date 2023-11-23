@@ -137,5 +137,51 @@ avail_zone = "eu-west-2b"
 subnet_cidr_block = "10.0.10.0/24"
 vpc_cidr_block = "10.0.0.0/16"
 env_prefix = "dev"
+
+# Creating new rtb and igw with the code below 
+
+`resource "aws_route_table" "myapp-route-table" {
+    vpc_id = aws_vpc.myapp-vpc.id
+route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.myapp-igw.id
+}
+   tags = {
+    name: "${var.env_prefix}-rtb"
+   }
+}
+
+resource "aws_internet_gateway" "myapp-igw" {
+    vpc_id = aws_vpc.myapp-vpc.id
+    tags = {
+        name: "${var.env_prefix}-igw"
+    }
+}
+`
+# Associate subnet to route table with the code below
+
+`resource "aws_internet_gateway" "myapp-igw" {
+  vpc_id = aws_vpc.myapp-vpc.id
+  tags = {
+    Name : "${var.env_prefix}-igw"
+  }
+}
+
+resource "aws_route_table" "myapp-rtb" {
+  vpc_id = aws_vpc.myapp-vpc.id
+  route {
+    cidr_block = "0.0.0.0/16"
+    gateway_id = aws_internet_gateway.myapp-igw.id
+  }
+  tags = {
+    Name : "${var.env_prefix}-rtb"
+  }
+}
+resource "aws_route_table_association" "a-rtb" {
+    subnet_id = aws_subnet.myapp-subnet-1.id
+    route_table_id = aws_route_table.myapp-rtb.id
+}`
+
+
 `
 
