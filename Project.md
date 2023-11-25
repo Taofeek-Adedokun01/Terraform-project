@@ -327,7 +327,7 @@ resource "aws_default_route_table" "main-myapp-rtb" {
 resource "aws_security_group" "myapp-sg" {
   name   = "myapp-sg"
   vpc_id = aws_vpc.myapp-vpc.id
-  ingress {
+en  ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -379,6 +379,7 @@ data "aws_ami" "latest-amazon-linux-image" {
  availability_zone = var.avail_zone
  associate_public_ip_address = true
  key_name = aws_key_pair.ssh-key.key_name
+'user_data = file ("entry-script.sh)'
  
  tags = {
     Name: "${var.env_prefix}-server"
@@ -393,5 +394,6 @@ env_prefix        = "dev"
 my_ip             = "my ip address"
 instance_type = "instance type"
 public_key_location = "path to my public key pair for key-gen"`
+private_key_location = "path to my private key pair for key-gen"`
 
 
